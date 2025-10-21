@@ -1,3 +1,4 @@
+
 <h1 align="center">
   <br>
   <a href="https://github.com/six2dez/reconftw"><img src="https://github.com/six2dez/reconftw/blob/main/images/banner.png" alt="reconftw"></a>
@@ -7,8 +8,8 @@
 </h1>
 
 <p align="center">
-  <a href="https://github.com/six2dez/reconftw/releases/tag/v2.8.1">
-    <img src="https://img.shields.io/badge/release-v2.8.1-green">
+  <a href="https://github.com/six2dez/reconftw/releases/tag/v3.1">
+    <img src="https://img.shields.io/badge/release-v3.1-green">
   </a>
    </a>
   <a href="https://opensource.org/licenses/MIT">
@@ -31,139 +32,251 @@
   </a>
 </p>
 
-<h3 align="center">Summary</h3>
+**reconFTW** is a powerful automated reconnaissance tool designed for security researchers and penetration testers. It streamlines the process of gathering intelligence on a target by performing subdomain enumeration, vulnerability scanning, OSINT and more. With a modular design, extensive configuration options, and support for distributed scanning via AX Framework, reconFTW is built to deliver comprehensive results efficiently.
 
-**reconFTW** automates the entire process of reconnaissance for you. It outperforms the work of subdomain enumeration along with various vulnerability checks and obtaining maximum information about your target.
+reconFTW leverages a wide range of techniques, including passive and active subdomain discovery, web vulnerability checks (e.g., XSS, SSRF, SQLi), OSINT, directory fuzzing, port scanning and screenshotting. It integrates with cutting-edge tools and APIs to maximize coverage and accuracy, ensuring you stay ahead in your reconnaissance efforts.
 
-reconFTW uses a lot of techniques (passive, bruteforce, permutations, certificate transparency, source code scraping, analytics, DNS records...) for subdomain enumeration which helps you to get the maximum and the most interesting subdomains so that you be ahead of the competition.
+**Key Features:**
 
-It also performs various vulnerability checks like XSS, Open Redirects, SSRF, CRLF, LFI, SQLi, SSL tests, SSTI, DNS zone transfers, and much more. Along with these, it performs OSINT techniques, directory fuzzing, dorking, ports scanning, screenshots, nuclei scan on your target.
+- Comprehensive subdomain enumeration (passive, bruteforce, permutations, certificate transparency, etc.)
+- Vulnerability scanning for XSS, SSRF, SQLi, LFI, SSTI, and more
+- OSINT for emails, metadata, API leaks, and third-party misconfigurations
+- Distributed scanning with AX Framework for faster execution
+- Customizable workflows with a detailed configuration file
+- Integration with Faraday for reporting and visualization
+- Support for Docker, Terraform and Ansible deployments
 
-So, what are you waiting for? Go! Go! Go! :boom:
+**Disclaimer:** Usage of reconFTW for attacking targets without prior consent is illegal. It is the user's responsibility to obey all applicable laws. The developers assume no liability for misuse or damage caused by this tool. Use responsibly.
+
+---
 
 ## 📔 Table of Contents
 
------------------
-
-- [⚙️ Config file](#️-config-file)
-- [Usage](#usage)
-  - [TARGET OPTIONS](#target-options)
-  - [MODE OPTIONS](#mode-options)
-  - [GENERAL OPTIONS](#general-options)
-  - [Example Usage](#example-usage)
-    - [To perform a full recon on single target](#to-perform-a-full-recon-on-single-target)
-    - [To perform a full recon on a list of targets](#to-perform-a-full-recon-on-a-list-of-targets)
-    - [Perform full recon with more time intense tasks *(VPS intended only)*](#perform-full-recon-with-more-time-intense-tasks-vps-intended-only)
-    - [Perform recon in a multi domain target](#perform-recon-in-a-multi-domain-target)
-    - [Perform recon with axiom integration](#perform-recon-with-axiom-integration)
-    - [Perform all steps (whole recon + all attacks) a.k.a. YOLO mode](#perform-all-steps-whole-recon--all-attacks-aka-yolo-mode)
-    - [Show help section](#show-help-section)
-- [Axiom Support :cloud:](#axiom-support-cloud)
-- [Sample video](#sample-video)
-- [:fire: Features :fire:](#fire-features-fire)
-  - [Osint](#osint)
+- [📔 Table of Contents](#-table-of-contents)
+- [✨ Features](#-features)
+  - [OSINT](#osint)
   - [Subdomains](#subdomains)
   - [Hosts](#hosts)
-  - [Webs](#webs)
-  - [Vulnerability checks](#vulnerability-checks)
+  - [Web Analysis](#web-analysis)
+  - [Vulnerability Checks](#vulnerability-checks)
   - [Extras](#extras)
-  - [Mindmap/Workflow](#mindmapworkflow)
-  - [Data Keep](#data-keep)
-    - [Makefile](#makefile)
-    - [Manual](#manual)
-    - [Main commands](#main-commands)
-  - [How to contribute](#how-to-contribute)
-  - [Need help? :information\_source:](#need-help-information_source)
-  - [Support this project](#support-this-project)
-    - [Buymeacoffee](#buymeacoffee)
-    - [DigitalOcean referral link](#digitalocean-referral-link)
-    - [GitHub sponsorship](#github-sponsorship)
-  - [Thanks :pray:](#thanks-pray)
-  - [Disclaimer](#disclaimer)
+- [💿 Installation](#-installation)
+  - [Local Installation (PC/VPS/VM)](#local-installation-pcvpsvm)
+  - [Docker](#docker)
+  - [Terraform + Ansible](#terraform--ansible)
+- [⚙️ Configuration](#️-configuration)
+- [🚀 Usage](#-usage)
+  - [Target Options](#target-options)
+  - [Mode Options](#mode-options)
+  - [General Options](#general-options)
+  - [Example Usage](#example-usage)
+- [☁️ Ax Framework Support (previously Axiom)](#️-ax-framework-support-previously-axiom)
+- [💻 Faraday Support](#-faraday-support)
+- [🧠 AI Integration](#-ai-integration)
+- [🗂️ Data Management](#️-data-management)
+  - [Makefile](#makefile)
+  - [Manual](#manual)
+- [Mindmap/Workflow](#mindmapworkflow)
+- [Sample video](#sample-video)
+- [🤝 How to Contribute](#-how-to-contribute)
+- [❓ Need Help?](#-need-help)
+- [💖 Support This Project](#-support-this-project)
+- [🙏 Thanks](#-thanks)
+- [📜 License](#-license)
+- [⭐ Star History](#-star-history)
 
------------------
+---
+
+## ✨ Features
+
+reconFTW is packed with features to make reconnaissance thorough and efficient. Below is a detailed breakdown of its capabilities, updated to reflect the latest functionality in the script and configuration.
+
+### OSINT
+
+- **Domain Information**: WHOIS lookup for domain registration details ([whois](https://github.com/rfc1036/whois)).
+- **Email and Password Leaks**: Searches for leaked emails and credentials ([emailfinder](https://github.com/Josue87/EmailFinder) and [LeakSearch](https://github.com/JoelGMSec/LeakSearch)).
+- **Microsoft 365/Azure Mapping**: Identifies Microsoft 365 and Azure tenants ([msftrecon](https://github.com/Arcanum-Sec/msftrecon)).
+- **Metadata Extraction**: Extracts metadata from indexed office documents ([metagoofil](https://github.com/opsdisk/metagoofil)).
+- **API Leaks**: Detects exposed APIs in public sources ([porch-pirate](https://github.com/MandConsultingGroup/porch-pirate) and [SwaggerSpy](https://github.com/UndeadSec/SwaggerSpy)).
+- **Google Dorking**: Automated Google dork queries for sensitive information ([dorks_hunter](https://github.com/six2dez/dorks_hunter) and [xnldorker](https://github.com/xnl-h4ck3r/xnldorker)).
+- **GitHub Analysis**: Scans GitHub organizations for repositories and secrets ([enumerepo](https://github.com/trickest/enumerepo), [trufflehog](https://github.com/trufflesecurity/trufflehog) and [gitleaks](https://github.com/gitleaks/gitleaks)).
+- **Third-Party Misconfigurations**: Identifies misconfigured third-party services ([misconfig-mapper](https://github.com/intigriti/misconfig-mapper)).
+- **Spoofable Domains**: Checks for domains vulnerable to spoofing ([spoofcheck](https://github.com/MattKeeley/Spoofy)).
+
+### Subdomains
+
+- **Passive Enumeration**: Uses APIs and public sources for subdomain discovery ([subfinder](https://github.com/projectdiscovery/subfinder) and [github-subdomains](https://github.com/gwen001/github-subdomains)).
+- **Certificate Transparency**: Queries certificate transparency logs ([crt](https://github.com/cemulus/crt)).
+- **NOERROR Discovery**: Identifies subdomains with DNS NOERROR responses ([dnsx](https://github.com/projectdiscovery/dnsx), more info [here](https://www.securesystems.de/blog/enhancing-subdomain-enumeration-ents-and-noerror/)).
+- **Bruteforce**: Performs DNS bruteforcing with customizable wordlists ([puredns](https://github.com/d3mondev/puredns) and custom wordlists).
+- **Permutations**: Generates subdomain permutations using AI, regex and tools ([Gotator](https://github.com/Josue87/gotator), [ripgen](https://github.com/resyncgg/ripgen), [regulator](https://github.com/cramppet/regulator) and [subwiz](https://github.com/hadriansecurity/subwiz)).
+- **Web Scraping**: Extracts subdomains from web crawling and JS files ([katana](https://github.com/projectdiscovery/katana)).
+- **DNS Records**: Resolves DNS records for subdomains ([dnsx](https://github.com/projectdiscovery/dnsx)).
+- **Google Analytics**: Identifies subdomains via Analytics IDs ([AnalyticsRelationships](https://github.com/Josue87/AnalyticsRelationships)).
+- **TLS Handshake**: Discovers subdomains via TLS ports ([tlsx](https://github.com/projectdiscovery/tlsx)).
+- **Recursive Search**: Performs recursive passive or bruteforce enumeration combined ([dsieve](https://github.com/trickest/dsieve)).
+- **Subdomain Takeover**: Detects vulnerable subdomains ([nuclei](https://github.com/projectdiscovery/nuclei) and [dnstake](https://github.com/pwnesia/dnstake)).
+- **DNS Zone Transfer**: Checks for misconfigured DNS zone transfers ([dig](https://linux.die.net/man/1/dig)).
+- **Cloud Buckets**: Identifies misconfigured S3 buckets ([S3Scanner](https://github.com/sa7mon/S3Scanner) and [CloudHunter](https://github.com/belane/CloudHunter)).
+- **Reverse IP Lookup**: Discovers subdomains via IP ranges ([hakip2host](https://github.com/hakluke/hakip2host)).
+
+### Hosts
+
+- **IP Information**: Retrieves geolocation and WHOIS data ([ipinfo](https://www.ipinfo.io/)).
+- **CDN Detection**: Identifies IPs behind CDNs ([cdncheck](https://github.com/projectdiscovery/cdncheck)).
+- **WAF Detection**: Detects Web Application Firewalls ([wafw00f](https://github.com/EnableSecurity/wafw00f)).
+- **Port Scanning**: Active scanning with [nmap](https://github.com/nmap/nmap) and passive scanning with [smap](https://github.com/s0md3v/Smap).
+- **Service Vulnerabilities**: Checks for vulnerabilities in open ports ([vulners](https://github.com/vulnersCom/nmap-vulners)).
+- **Password Spraying**: Attempts password spraying on identified services ([brutespray](https://github.com/x90skysn3k/brutespray)).
+- **Geolocation**: Maps IP addresses to geographic locations ([ipinfo](https://www.ipinfo.io/)).
+
+### Web Analysis
+
+- **Web Probing**: Detects live web servers on standard and uncommon ports (([httpx](https://github.com/projectdiscovery/httpx))).
+- **Screenshots**: Captures screenshots of web pages ([nuclei](https://github.com/projectdiscovery/nuclei)).
+- **Virtual Host Fuzzing**: Identifies virtual hosts by fuzzing HTTP headers ([VhostFinder](https://github.com/wdahlenburg/VhostFinder)).
+- **CMS Detection**: Identifies content management systems ([CMSeeK](https://github.com/Tuhinshubhra/CMSeeK)).
+- **URL Extraction**: Collects URLs passively and actively ([urlfinder](https://github.com/projectdiscovery/urlfinder), [katana](https://github.com/projectdiscovery/katana), [github-endpoints](https://gist.github.com/six2dez/d1d516b606557526e9a78d7dd49cacd3) and [JSA](https://github.com/w9w/JSA)).
+- **URL Pattern Analysis**: Classifies URLs using patterns ([urless](https://github.com/xnl-h4ck3r/urless), [gf](https://github.com/tomnomnom/gf) and [gf-patterns](https://github.com/1ndianl33t/Gf-Patterns)).
+- **Favicon Analysis**: Discovers real IPs behind favicons ([fav-up](https://github.com/pielco11/fav-up)).
+- **JavaScript Analysis**: Extracts secrets and endpoints from JS files ([subjs](https://github.com/lc/subjs), [JSA](https://github.com/w9w/JSA), [xnLinkFinder](https://github.com/xnl-h4ck3r/xnLinkFinder), [getjswords](https://github.com/m4ll0k/BBTz), [mantra](https://github.com/MrEmpy/mantra), [jsluice](https://github.com/BishopFox/jsluice)).
+- **Source Map Extraction**: Retrieves sensitive data from JavaScript source maps ([sourcemapper](https://github.com/denandz/sourcemapper)).
+- **Fuzzing**: Performs directory and parameter fuzzing ([ffuf](https://github.com/ffuf/ffuf)).
+- **File Extension Sorting**: Organizes URLs by file extensions.
+- **Wordlist Generation**: Creates custom wordlists for fuzzing.
+- **Password Dictionary**: Generates password dictionaries ([pydictor](https://github.com/LandGrey/pydictor)).
+- **IIS Shortname Scanning**: Detects IIS shortname vulnerabilities ([shortscan](https://github.com/bitquark/shortscan) and [sns](https://github.com/sw33tLie/sns)).
+
+### Vulnerability Checks
+
+- **CVEs**: Checks for CVE and common vulnerabilites [nuclei](https://github.com/projectdiscovery/nuclei)
+- **XSS**: Tests for cross-site scripting vulnerabilities ([dalfox](https://github.com/hahwul/dalfox)).
+- **CORS**: Identifies CORS misconfigurations ([Corsy](https://github.com/s0md3v/Corsy)).
+- **SSL/TLS**: Checks for SSL/TLS misconfigurations ([testssl](https://github.com/drwetter/testssl.sh)).
+- **Open Redirects**: Detects open redirect vulnerabilities ([Oralyzer](https://github.com/r0075h3ll/Oralyzer)).
+- **SSRF**: Tests for server-side request forgery ([interactsh](https://github.com/projectdiscovery/interactsh) and param values with [ffuf](https://github.com/ffuf/ffuf)).
+- **CRLF**: Checks for CRLF injection vulnerabilities ([crlfuzz](https://github.com/dwisiswant0/crlfuzz)).
+- **LFI**: Tests for local file inclusion via fuzzing ([ffuf](https://github.com/ffuf/ffuf)).
+- **SSTI**: Detects server-side template injection ([ffuf](https://github.com/ffuf/ffuf)).
+- **SQLi**: Tests for SQL injection ([SQLMap](https://github.com/sqlmapproject/sqlmap) and [ghauri](https://github.com/r0oth3x49/ghauri)).
+- **Broken Links**: Identifies broken links on web pages ([katana](https://github.com/projectdiscovery/katana)).
+- **Command Injection**: Tests for command injection vulnerabilities ([commix](https://github.com/commixproject/commix)).
+- **Prototype Pollution**: Detects JavaScript prototype pollution ([ppmap](https://github.com/kleiton0x00/ppmap)).
+- **HTTP Request Smuggling**: Checks for request smuggling vulnerabilities ([smuggler](https://github.com/defparam/smuggler)).
+- **Web Cache**: Identifies web cache vulnerabilities ([Web-Cache-Vulnerability-Scanner](https://github.com/Hackmanit/Web-Cache-Vulnerability-Scanner)).
+- **4XX Bypassing**: Attempts to bypass 4XX responses ([nomore403](https://github.com/devploit/nomore403)).
+- **Parameter Fuzzing**: Fuzzes URL parameters for vulnerabilities ([nuclei](https://github.com/projectdiscovery/nuclei)).
+
+### Extras
+
+- **Multithreading**: Optimizes performance ([Interlace](https://github.com/codingo/Interlace)).
+- **Custom Resolvers**: Generates DNS resolvers ([dnsvalidator](https://github.com/vortexau/dnsvalidator)).
+- **Docker Support**: Official Docker image on [DockerHub](https://hub.docker.com/r/six2dez/reconftw).
+- **AWS Deployment**: Deploys via Terraform and Ansible.
+- **IP/CIDR Support**: Scans IP ranges and CIDR blocks.
+- **Scan Resumption**: Resumes scans from the last completed step.
+- **Custom Output**: Saves results to a user-defined directory.
+- **Diff Mode**: Highlights new findings in subsequent scans.
+- **Scope Filtering**: Supports in-scope and out-of-scope lists ([inscope](https://github.com/tomnomnom/hacks/tree/master/inscope)).
+- **Notifications**: Sends alerts via Slack, Discord, or Telegram ([notify](https://github.com/projectdiscovery/notify)).
+- **Result Zipping**: Compresses and sends results.
+- **Faraday Integration**: Exports results to [Faraday](https://github.com/infobyte/faraday) for reporting .
+- **AI Report Generation**: Generates reports using local AI models ([reconftw_ai](https://github.com/six2dez/reconftw_ai)).
+- **ARM Support**: Compatible with Raspberry Pi and ARM architectures (including MacOS MX).
+
+---
 
 ## 💿 Installation
 
-## a) Using a PC/VPS/VM
+reconFTW supports multiple installation methods to suit different environments. Ensure you have sufficient disk space (at least 10 GB recommended) and a stable internet connection.
 
-> You can check out our wiki for the installation guide [Installation Guide](https://github.com/six2dez/reconftw/wiki/0.-Installation-Guide) :book:
+### Local Installation (PC/VPS/VM)
 
-- Requires [Golang](https://golang.org/dl/) > **1.15.0+** installed and paths correctly set (**$GOPATH**, **$GOROOT**)
+1. **Prerequisites**:
 
-Important: if you are not running reconftw as root, run `sudo echo "${USERNAME}  ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/reconFTW`, to make sure no sudo prompts are required to run the tool and to avoid any permission issues.
+   - **Golang**: Latest version (`install_golang` enabled by default in `reconftw.cfg`).
+   - **System Permissions**: If not running as root, configure sudo to avoid prompts:
+     ```bash
+     sudo echo "${USERNAME} ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/reconFTW
+     ```
 
-```bash
-git clone https://github.com/six2dez/reconftw
-cd reconftw/
-./install.sh
-./reconftw.sh -d target.com -r
-```
+2. **Steps**:
 
-## b) Docker Image 🐳 (3 options)
+   ```bash
+   git clone https://github.com/six2dez/reconftw
+   cd reconftw
+   ./install.sh
+   ./reconftw.sh -d target.com -r
+   ```
 
-- Pull the image
+3. **Notes**:
+   - The `install.sh` script installs dependencies, tools, and configures paths (`GOROOT`, `GOPATH`, `PATH`).
+   - Set `install_golang=false` in `reconftw.cfg` if Golang is already configured.
+   - Check the [Installation Guide](https://github.com/six2dez/reconftw/wiki/0.-Installation-Guide) for detailed instructions.
 
-```bash
-docker pull six2dez/reconftw:main
-```
+### Docker
 
-- Run the container
+1. **Pull the Image**:
 
-```bash
-docker run -it --rm \
--v "${PWD}/OutputFolder/":'/reconftw/Recon/' \
-six2dez/reconftw:main -d example.com -r
-```
+   ```bash
+   docker pull six2dez/reconftw:main
+   ```
 
-- View results (they're NOT in the Docker container)
+2. **Run the Container**:
 
-  - As the folder you cloned earlier (named `reconftw`) is being renamed to `OutputFolder`, you'll have to go to that folder to view results.
+   ```bash
+   docker run -it --rm \
+     -v "${PWD}/OutputFolder/:/reconftw/Recon/" \
+     six2dez/reconftw:main -d example.com -r
+   ```
 
-If you wish to:
+3. **View Results**:
 
-1. Dynamically modify the behaviour & function of the image
-2. Build your own container
-3. Build an Axiom Controller on top of the official image
+   - Results are saved in the `OutputFolder` directory on the host (not inside the container).
 
-Please refer to the [Docker](https://github.com/six2dez/reconftw/wiki/4.-Docker) documentation.
+4. **Customization**:
+   - Modify the Docker image or build your own; see the [Docker Guide](https://github.com/six2dez/reconftw/wiki/4.-Docker).
 
-## c) Terraform + Ansible
+### Terraform + Ansible
 
-Yes! reconFTW can also be easily deployed with Terraform and Ansible to AWS, if you want to know how to do it, you can check the guide [here](Terraform/README.md)
+- Deploy reconFTW on AWS using Terraform and Ansible.
+- Follow the guide in [Terraform/README.md](Terraform/README.md) for setup instructions.
 
-# ⚙️ Config file
->
-> You can find a detailed explanation of the configuration file [here](https://github.com/six2dez/reconftw/wiki/3.-Configuration-file) :book:
+---
 
-- Through ```reconftw.cfg``` file the whole execution of the tool can be controlled.
-- Hunters can set various scanning modes, execution preferences, tools, config files, APIs/TOKENS, personalized wordlists and much more.
+## ⚙️ Configuration
 
-<details>
- <br><br>
- <summary> :point_right: Click here to view default config file :point_left: </summary>
+The `reconftw.cfg` file controls the entire execution of reconFTW. It allows fine-grained customization of:
+
+- **Tool Paths**: Set paths for tools, resolvers, and wordlists (`tools`, `resolvers`, `fuzz_wordlist`).
+- **API Keys**: Configure keys for Shodan, WHOISXML, etc. (uncomment and set in `reconftw.cfg`).
+- **Scanning Modes**: Enable/disable modules (e.g., `OSINT`, `SUBDOMAINS_GENERAL`, `VULNS_GENERAL`).
+- **Performance**: Adjust threads, rate limits, and timeouts (e.g., `FFUF_THREADS`, `HTTPX_RATELIMIT`).
+- **Notifications**: Set up Slack, Discord, or Telegram notifications (`NOTIFY_CONFIG`).
+- **Axiom**: Configure distributed scanning (`AXIOM_FLEET_NAME`, `AXIOM_FLEET_COUNT`).
+- **AI Reporting**: Select AI model and report format (`AI_MODEL`, `AI_REPORT_TYPE`).
+
+**Example Configuration**:
 
 ```yaml
-#################################################################
+#############################################
 #			reconFTW config file			#
-#################################################################
+#############################################
 
 # General values
-tools=~/Tools   # Path installed tools
+tools=$HOME/Tools   # Path installed tools
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )" # Get current script's path
 profile_shell=".$(basename $(echo $SHELL))rc" # Get current shell profile
 reconftw_version=$(git rev-parse --abbrev-ref HEAD)-$(git describe --tags) # Fetch current reconftw version
 generate_resolvers=false # Generate custom resolvers with dnsvalidator
 update_resolvers=true # Fetch and rewrite resolvers from trickest/resolvers before DNS resolution
 resolvers_url="https://raw.githubusercontent.com/trickest/resolvers/main/resolvers.txt"
-resolvers_trusted_url="https://raw.githubusercontent.com/six2dez/resolvers_reconftw/main/resolvers_trusted.txt"
-fuzzing_remote_list="https://raw.githubusercontent.com/six2dez/OneListForAll/main/onelistforallmicro.txt" # Used to send to axiom(if used) on fuzzing 
+resolvers_trusted_url="https://gist.githubusercontent.com/six2dez/ae9ed7e5c786461868abd3f2344401b6/raw/trusted_resolvers.txt"
+fuzzing_remote_list="https://raw.githubusercontent.com/six2dez/OneListForAll/main/onelistforallmicro.txt" # Used to send to axiom(if used) on fuzzing
 proxy_url="http://127.0.0.1:8080/" # Proxy url
 install_golang=true # Set it to false if you already have Golang configured and ready
 upgrade_tools=true
 upgrade_before_running=false # Upgrade tools before running
-#SPINNY_FRAMES=(. .. ... .... ..... " ...." "  ..." "   .." "    ." "      " )
-SPINNY_DELAY=0.1
 #dir_output=/custom/output/path
 
 # Golang Vars (Comment or change on your own)
@@ -171,9 +284,11 @@ export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.local/bin:$PATH
 
+# Rust Vars (Comment or change on your own)
+export PATH="$HOME/.cargo/bin:$PATH"
+
 # Tools config files
 #NOTIFY_CONFIG=~/.config/notify/provider-config.yaml # No need to define
-AMASS_CONFIG=~/.config/amass/config.ini
 GITHUB_TOKENS=${tools}/.github_tokens
 GITLAB_TOKENS=${tools}/.gitlab_tokens
 #CUSTOM_CONFIG=custom_config_path.txt # In case you use a custom config file, uncomment this line and set your files path
@@ -196,16 +311,15 @@ GOOGLE_DORKS=true
 GITHUB_DORKS=true
 GITHUB_REPOS=true
 METADATA=true # Fetch metadata from indexed office documents
-EMAILS=true # Fetch emails from differents sites 
+EMAILS=true # Fetch emails from differents sites
 DOMAIN_INFO=true # whois info
-REVERSE_WHOIS=true # amass intel reverse whois info, takes some time
 IP_INFO=true    # Reverse IP search, geolocation and whois
 API_LEAKS=true # Check for API leaks
+THIRD_PARTIES=true # Check for 3rd parties misconfigs
+SPOOF=true # Check spoofable domains
 METAFINDER_LIMIT=20 # Max 250
 
 # Subdomains
-RUNAMASS=true
-RUNSUBFINDER=true
 SUBDOMAINS_GENERAL=true # Enable or disable the whole Subdomains module
 SUBPASSIVE=true # Passive subdomains search
 SUBCRT=true # crtsh search
@@ -215,6 +329,7 @@ SUBANALYTICS=true # Google Analytics search
 SUBBRUTE=true # DNS bruteforcing
 SUBSCRAPING=true # Subdomains extraction from web crawling
 SUBPERMUTE=true # DNS permutations
+SUBIAPERMUTE=true # Permutations by IA analysis
 SUBREGEXPERMUTE=true # Permutations by regex analysis
 PERMUTATIONS_OPTION=gotator # The alternative is "ripgen" (faster, not deeper)
 GOTATOR_FLAGS=" -depth 1 -numbers 3 -mindup -adv -md" # Flags for gotator
@@ -226,7 +341,7 @@ ZONETRANSFER=true # Check zone transfer
 S3BUCKETS=true # Check S3 buckets misconfigs
 REVERSE_IP=false # Check reverse IP subdomain search (set True if your target is CIDR/IP)
 TLS_PORTS="21,22,25,80,110,135,143,261,271,324,443,448,465,563,614,631,636,664,684,695,832,853,854,990,993,989,992,994,995,1129,1131,1184,2083,2087,2089,2096,2221,2252,2376,2381,2478,2479,2482,2484,2679,2762,3077,3078,3183,3191,3220,3269,3306,3410,3424,3471,3496,3509,3529,3539,3535,3660,36611,3713,3747,3766,3864,3885,3995,3896,4031,4036,4062,4064,4081,4083,4116,4335,4336,4536,4590,4740,4843,4849,5443,5007,5061,5321,5349,5671,5783,5868,5986,5989,5990,6209,6251,6443,6513,6514,6619,6697,6771,7202,7443,7673,7674,7677,7775,8243,8443,8991,8989,9089,9295,9318,9443,9444,9614,9802,10161,10162,11751,12013,12109,14143,15002,16995,41230,16993,20003"
-INSCOPE=false # Uses inscope tool to filter the scope, requires .scope file in reconftw folder 
+INSCOPE=false # Uses inscope tool to filter the scope, requires .scope file in reconftw folder
 
 # Web detection
 WEBPROBESIMPLE=true # Web probing on 80/443
@@ -237,9 +352,11 @@ UNCOMMON_PORTS_WEB="81,300,591,593,832,981,1010,1311,1099,2082,2095,2096,2480,30
 
 # Host
 FAVICON=true # Check Favicon domain discovery
-PORTSCANNER=true # Enable or disable the whole Port scanner module 
+PORTSCANNER=true # Enable or disable the whole Port scanner module
+GEO_INFO=true # Fetch Geolocalization info
 PORTSCAN_PASSIVE=true # Port scanner with Shodan
 PORTSCAN_ACTIVE=true # Port scanner with nmap
+PORTSCAN_ACTIVE_OPTIONS="--top-ports 200 -sV -n -Pn --open --max-retries 2 --script vulners"
 CDN_IP=true # Check which IPs belongs to CDN
 
 # Web analysis
@@ -247,8 +364,10 @@ WAF_DETECTION=true # Detect WAFs
 NUCLEICHECK=true # Enable or disable nuclei
 NUCLEI_TEMPLATES_PATH="$HOME/nuclei-templates" # Set nuclei templates path
 NUCLEI_SEVERITY="info,low,medium,high,critical" # Set templates criticity
-NUCLEI_FLAGS=" -silent -t ${NUCLEI_TEMPLATES_PATH}/ -retries 2" # Additional nuclei extra flags, don't set the severity here but the exclusions like " -etags openssh"
-NUCLEI_FLAGS_JS=" -silent -tags exposure,token -severity info,low,medium,high,critical" # Additional nuclei extra flags for js secrets
+NUCLEI_EXTRA_ARGS="" # Additional nuclei extra flags, don't set the severity here but the exclusions like " -etags openssh"
+#NUCLEI_EXTRA_ARGS="-etags openssh,ssl -eid node-express-dev-env,keycloak-xss,CVE-2023-24044,CVE-2021-20323,header-sql,header-reflection" # Additional nuclei extra flags, don't set the severity here but the exclusions like " -etags openssh"
+NUCLEI_FLAGS="-silent -retries 2" # Additional nuclei extra flags, don't set the severity here but the exclusions like " -etags openssh"
+NUCLEI_FLAGS_JS="-silent -tags exposure,token -severity info,low,medium,high,critical" # Additional nuclei extra flags for js secrets
 URL_CHECK=true # Enable or disable URL collection
 URL_CHECK_PASSIVE=true # Search for urls, passive methods from Archive, OTX, CommonCrawl, etc
 URL_CHECK_ACTIVE=true # Search for urls by crawling the websites
@@ -256,12 +375,15 @@ URL_GF=true # Url patterns classification
 URL_EXT=true # Returns a list of files divided by extension
 JSCHECKS=true # JS analysis
 FUZZ=true # Web fuzzing
+IIS_SHORTNAME=true
 CMS_SCANNER=true # CMS scanner
 WORDLIST=true # Wordlist generation
 ROBOTSWORDLIST=true # Check historic disallow entries on waybackMachine
 PASSWORD_DICT=true # Generate password dictionary
 PASSWORD_MIN_LENGTH=5 # Min password length
 PASSWORD_MAX_LENGTH=14 # Max password length
+CLOUDHUNTER_PERMUTATION=NORMAL # Options: DEEP (very slow), NORMAL (slow), NONE
+NUCLEI_FUZZING_TEMPLATES_PATH="${tools}/fuzzing-templates" # Set nuclei templates path
 
 # Vulns
 VULNS_GENERAL=false # Enable or disable the vulnerability module (very intrusive and slow)
@@ -297,7 +419,7 @@ REMOVELOG=false # Delete logs after execution
 PROXY=false # Send to proxy the websites found
 SENDZIPNOTIFY=false # Send to zip the results (over notify)
 PRESERVE=true      # set to true to avoid deleting the .called_fn files on really large scans
-FFUF_FLAGS=" -mc all -fc 404 -ach -sf -of json" # Ffuf flags
+FFUF_FLAGS=" -mc all -fc 404 -sf -noninteractive -of json" # Ffuf flags
 HTTPX_FLAGS=" -follow-redirects -random-agent -status-code -silent -title -web-server -tech-detect -location -content-length" # Httpx flags for simple web probing
 
 # HTTP options
@@ -310,7 +432,6 @@ HTTPX_UNCOMMONPORTS_THREADS=100
 KATANA_THREADS=20
 BRUTESPRAY_THREADS=20
 BRUTESPRAY_CONCURRENCE=10
-GAU_THREADS=10
 DNSTAKE_THREADS=100
 DALFOX_THREADS=200
 PUREDNS_PUBLIC_LIMIT=0 # Set between 2000 - 10000 if your router blows up, 0 means unlimited
@@ -318,7 +439,6 @@ PUREDNS_TRUSTED_LIMIT=400
 PUREDNS_WILDCARDTEST_LIMIT=30
 PUREDNS_WILDCARDBATCH_LIMIT=1500000
 RESOLVE_DOMAINS_THREADS=150
-PPFUZZ_THREADS=30
 DNSVALIDATOR_THREADS=200
 INTERLACE_THREADS=10
 TLSX_THREADS=1000
@@ -330,8 +450,7 @@ NUCLEI_RATELIMIT=150
 FFUF_RATELIMIT=0
 
 # Timeouts
-AMASS_INTEL_TIMEOUT=15          # Minutes
-AMASS_ENUM_TIMEOUT=180          # Minutes
+SUBFINDER_ENUM_TIMEOUT=180          # Minutes
 CMSSCAN_TIMEOUT=3600            # Seconds
 FFUF_MAXTIME=900                # Seconds
 HTTPX_TIMEOUT=10                # Seconds
@@ -360,6 +479,18 @@ AXIOM_FLEET_SHUTDOWN=true # # Enable or disable delete the fleet after the execu
 AXIOM_EXTRA_ARGS="" # Leave empty if you don't want to add extra arguments
 #AXIOM_EXTRA_ARGS=" --rm-logs" # Example
 
+# Faraday-Server
+FARADAY=false # Enable or disable Faraday integration
+FARADAY_SERVER="http://localhost:5985" # Faraday server address
+FARADAY_USER="faraday" # Faraday user
+FARADAY_PASS="FARADAY_PASSWORD" # Faraday password
+FARADAY_WORKSPACE="reconftw" # Faraday workspace
+
+# AI
+AI_MODEL="llama3:8b" # Model to use
+AI_REPORT_TYPE="md" # Report type to use (md, txt)
+AI_REPORT_PROFILE="bughunter" # Report profile to use (executive, brief, or bughunter)
+
 # TERM COLORS
 bred='\033[1;31m'
 bblue='\033[1;34m'
@@ -370,272 +501,250 @@ blue='\033[0;34m'
 green='\033[0;32m'
 yellow='\033[0;33m'
 reset='\033[0m'
-
 ```
 
-</details>
+**Full Details**: See the [Configuration Guide](https://github.com/six2dez/reconftw/wiki/3.-Configuration-file).
 
-# Usage
+---
 
-> Check out the wiki section to know which flag performs what all steps/attacks [Usage Guide](https://github.com/six2dez/reconftw/wiki/2.-Usage-Guide) :book:
+## 🚀 Usage
 
-## TARGET OPTIONS
+reconFTW supports multiple modes and options for flexible reconnaissance. Use the `-h` flag to view the help menu.
 
-| Flag | Description |
-|------|-------------|
-| -d | Single Target domain *(example.com)*  |
-| -l | List of targets *(one per line)* |
-| -m | Multiple domain target *(companyName)*  |
-| -x | Exclude subdomains list *(Out Of Scope)* |
-| -i | Include subdomains list *(In Scope)* |
+### Target Options
 
-## MODE OPTIONS
+| Flag | Description                                                  |
+| ---- | ------------------------------------------------------------ |
+| `-d` | Single target domain (e.g., `example.com`)                   |
+| `-l` | File with list of target domains (one per line)              |
+| `-m` | Multi-domain target (e.g., company name for related domains) |
+| `-x` | Exclude subdomains (out-of-scope list)                       |
+| `-i` | Include subdomains (in-scope list)                           |
 
-| Flag | Description |
-|------|-------------|
-| -r | Recon - Full recon process (without attacks like sqli,ssrf,xss,ssti,lfi etc.) |
-| -s | Subdomains - Perform only subdomain enumeration, web probing, subdomain takeovers |
-| -p | Passive - Perform only passive steps |
-| -a | All - Perform whole recon and all active attacks |
-| -w | Web - Perform only vulnerability checks/attacks on particular target |
-| -n | OSINT - Performs an OSINT scan (no subdomain enumeration and attacks) |
-| -c | Custom - Launches specific function against target |
-| -h | Help - Show this help menu |
+### Mode Options
 
-## GENERAL OPTIONS
+| Flag | Description                                                           |
+| ---- | --------------------------------------------------------------------- |
+| `-r` | **Recon**: Full reconnaissance without active attacks                 |
+| `-s` | **Subdomains**: Subdomain enumeration, web probing, and takeovers     |
+| `-p` | **Passive**: Passive reconnaissance only                              |
+| `-a` | **All**: Full reconnaissance plus active vulnerability checks         |
+| `-w` | **Web**: Vulnerability checks on specific web targets                 |
+| `-n` | **OSINT**: OSINT scan without subdomain enumeration or attacks        |
+| `-z` | **Zen**: Lightweight recon with basic checks and some vulnerabilities |
+| `-c` | **Custom**: Run a specific function (requires additional arguments)   |
+| `-h` | Show help menu                                                        |
 
-| Flag | Description |
-|------|-------------|
-| --deep | Deep scan (Enable some slow options for deeper scan, *vps intended mode*) |
-| -f | Custom config file path |
-| -o | Output directory |
-| -v | Axiom distributed VPS |
-| -q | Rate limit in requests per second |
+### General Options
 
-## Example Usage
+| Flag            | Description                                    |
+| --------------- | ---------------------------------------------- |
+| `--deep`        | Enable deep scanning (slower, VPS recommended) |
+| `-f`            | Custom configuration file path                 |
+| `-o`            | Output directory for results                   |
+| `-v`            | Enable Axiom distributed scanning              |
+| `-q`            | Set rate limit (requests per second)           |
+| `-y`            | Enables AI results analysis                    |
+| `--check-tools` | Exit if required tools are missing             |
 
-**NOTE: this is applicable when you've installed reconFTW on the host (e.g. VM/VPS/cloud) and not in a Docker container.**
+### Example Usage
 
-### To perform a full recon on single target
+1. **Full Recon on a Single Target**:
 
-```bash
-./reconftw.sh -d target.com -r
-```
+   ```bash
+   ./reconftw.sh -d target.com -r
+   ```
 
-### To perform a full recon on a list of targets
+2. **Recon on Multiple Targets**:
 
-```bash
-./reconftw.sh -l sites.txt -r -o /output/directory/
-```
+   ```bash
+   ./reconftw.sh -l targets.txt -r -o /path/to/output/
+   ```
 
-### Perform full recon with more time intense tasks *(VPS intended only)*
+3. **Deep Recon (VPS Recommended)**:
 
-```bash
-./reconftw.sh -d target.com -r --deep -o /output/directory/
-```
+   ```bash
+   ./reconftw.sh -d target.com -r --deep
+   ```
 
-### Perform recon in a multi domain target
+4. **Multi-Domain Recon**:
 
-```bash
-./reconftw.sh -m company -l domains_list.txt -r
-```
+   ```bash
+   ./reconftw.sh -m company -l domains.txt -r
+   ```
 
-### Perform recon with axiom integration
+5. **Axiom Integration**:
+
+   ```bash
+   ./reconftw.sh -d target.com -r -v
+   ```
+
+6. **Full Recon with Attacks (YOLO Mode)**:
+
+   ```bash
+   ./reconftw.sh -d target.com -a
+   ```
+
+7. **Show Help**:
+   ```bash
+   ./reconftw.sh -h
+   ```
+
+**Full Guide**: See the [Usage Guide](https://github.com/six2dez/reconftw/wiki/2.-Usage-Guide).
+
+---
+
+## ☁️ Ax Framework Support (previously Axiom)
+
+reconFTW integrates with [Ax](https://github.com/attacksurge/ax) for distributed scanning, reducing execution time by distributing tasks across multiple cloud instances.
+
+- **Setup**: Select `reconftw` as the provisioner during Axiom configuration.
+- **Fleet Management**: Automatically create and destroy fleets (`AXIOM_FLEET_LAUNCH`, `AXIOM_FLEET_SHUTDOWN`) or use an existing fleet.
+- **Configuration**: Set fleet size, region, and name in `reconftw.cfg` (`AXIOM_FLEET_COUNT`, `AXIOM_FLEET_REGIONS`, `AXIOM_FLEET_NAME`).
+
+**Example**:
 
 ```bash
 ./reconftw.sh -d target.com -r -v
 ```
 
-### Perform all steps (whole recon + all attacks) a.k.a. YOLO mode
+**Details**: See the [Axiom Guide](https://github.com/six2dez/reconftw/wiki/5.-Axiom-version) and official [Ax Docs](https://ax.attacksurge.com/).
 
-```bash
-./reconftw.sh -d target.com -a
+---
+
+## 💻 Faraday Support
+
+reconFTW integrates with [Faraday](https://faradaysec.com/) for web-based reporting and vulnerability management.
+
+- **Setup**: Install Faraday, authenticate via `faraday-cli`, and configure the workspace in `reconftw.cfg` (`FARADAY_SERVER`, `FARADAY_USER`, `FARADAY_PASS`, `FARADAY_WORKSPACE`).
+- **Usage**: Enable with `FARADAY=true` in `reconftw.cfg`.
+
+---
+
+## 🧠 AI Integration
+
+reconFTW uses AI to generate detailed reports from scan results with the tool [reconftw_ai](https://github.com/six2dez/reconftw_ai).
+
+- **Model**: Configurable AI model (e.g., `llama3:8b` via `AI_MODEL`).
+- **Report Types**: Markdown or plain text (`AI_REPORT_TYPE`).
+- **Profiles**: Executive, brief, or bug hunter (`AI_REPORT_PROFILE`).
+
+**Example**:
+
+```yaml
+AI_MODEL="llama3:8b"
+AI_REPORT_TYPE="md"
+AI_REPORT_PROFILE="bughunter"
 ```
 
-### Show help section
+---
 
-```bash
-./reconftw.sh -h
-```
+## 🗂️ Data Management
 
-# Axiom Support :cloud:
+Manage scan data and API keys securely using a private repository.
 
-![](https://i.ibb.co/Jzrgkqt/axiom-readme.png)
-> Check out the wiki section for more info [Axiom Support](https://github.com/six2dez/reconftw/wiki/5.-Axiom-version)
+### Makefile
 
-- As reconFTW actively hits the target with a lot of web traffic, hence there was a need to move to Axiom distributing the work load among various instances leading to reduction of execution time.
-- During the configuration of axiom you need to select `reconftw` as provisoner.
-- You can create your own axiom's fleet before running reconFTW or let reconFTW to create and destroy it automatically just modifying reconftw.cfg file.
+Use the provided `Makefile` for easy repository management (requires [GitHub CLI](https://cli.github.com/)).
 
-# Sample video
+1. **Bootstrap**:
 
-![Video](images/reconFTW.gif)
+   ```bash
+   export PRIV_REPO="$HOME/reconftw-data"
+   make bootstrap
+   ```
 
-# :fire: Features :fire:
+2. **Sync with Upstream**:
 
-## Osint
+   ```bash
+   make sync
+   ```
 
-- Domain information ([whois](https://github.com/rfc1036/whois) and [amass](https://github.com/OWASP/Amass))
-- Emails addresses and passwords leaks ([emailfinder](https://github.com/Josue87/EmailFinder) and [LeakSearch](https://github.com/JoelGMSec/LeakSearch))
-- Metadata finder ([MetaFinder](https://github.com/Josue87/MetaFinder))
-- API leaks search ([porch-pirate](https://github.com/MandConsultingGroup/porch-pirate) and [SwaggerSpy](https://github.com/UndeadSec/SwaggerSpy))
-- Google Dorks ([dorks_hunter](https://github.com/six2dez/dorks_hunter))
-- Github Dorks ([gitdorks_go](https://github.com/damit5/gitdorks_go))
-- GitHub org analysis ([enumerepo](https://github.com/trickest/enumerepo), [trufflehog](https://github.com/trufflesecurity/trufflehog) and [gitleaks](https://github.com/gitleaks/gitleaks))
+3. **Upload Data**:
+   ```bash
+   make upload
+   ```
 
-## Subdomains
+### Manual
 
-- Passive ([amass](https://github.com/OWASP/Amass), [subfinder](https://github.com/projectdiscovery/subfinder) and [github-subdomains](https://github.com/gwen001/github-subdomains))
-- Certificate transparency ([crt](https://github.com/cemulus/crt))
-- NOERROR subdomain discovery ([dnsx](https://github.com/projectdiscovery/dnsx), more info [here](https://www.securesystems.de/blog/enhancing-subdomain-enumeration-ents-and-noerror/))
-- Bruteforce ([puredns](https://github.com/d3mondev/puredns))
-- Permutations ([Gotator](https://github.com/Josue87/gotator), [ripgen](https://github.com/resyncgg/ripgen) and [regulator](https://github.com/cramppet/regulator))
-- JS files & Source Code Scraping ([katana](https://github.com/projectdiscovery/katana))
-- DNS Records ([dnsx](https://github.com/projectdiscovery/dnsx))
-- Google Analytics ID ([AnalyticsRelationships](https://github.com/Josue87/AnalyticsRelationships))
-- TLS handshake ([tlsx](https://github.com/projectdiscovery/tlsx))
-- Recursive search ([dsieve](https://github.com/trickest/dsieve)).
-- Subdomains takeover ([nuclei](https://github.com/projectdiscovery/nuclei))
-- DNS takeover ([dnstake](https://github.com/pwnesia/dnstake))
-- DNS Zone Transfer ([dig](https://linux.die.net/man/1/dig))
-- Cloud checkers ([S3Scanner](https://github.com/sa7mon/S3Scanner) and [cloud_enum](https://github.com/initstring/cloud_enum))
+1. Create a private repository on GitHub/GitLab.
+2. Clone and configure:
 
-## Hosts
+   ```bash
+   git clone https://github.com/yourusername/reconftw-data
+   cd reconftw-data
+   git commit --allow-empty -m "Initial commit"
+   git remote add upstream https://github.com/six2dez/reconftw
+   git fetch upstream
+   git rebase upstream/main master
+   ```
 
-- IP info ([whoisxmlapi API](https://www.whoisxmlapi.com/))
-- CDN checker ([ipcdn](https://github.com/six2dez/ipcdn))
-- WAF checker ([wafw00f](https://github.com/EnableSecurity/wafw00f))
-- Port Scanner (Active with [nmap](https://github.com/nmap/nmap) and passive with [smap](https://github.com/s0md3v/Smap))
-- Port services vulnerability checks ([vulners](https://github.com/vulnersCom/nmap-vulners))
-- Password spraying ([brutespray](https://github.com/x90skysn3k/brutespray))
+3. **Upload Changes**:
 
-## Webs
+   ```bash
+   git add .
+   git commit -m "Data upload"
+   git push origin master
+   ```
 
-- Web Prober ([httpx](https://github.com/projectdiscovery/httpx))
-- Web screenshoting ([nuclei](https://github.com/projectdiscovery/nuclei))
-- Web templates scanner ([nuclei](https://github.com/projectdiscovery/nuclei) and [nuclei geeknik](https://github.com/geeknik/the-nuclei-templates.git))
-- CMS Scanner ([CMSeeK](https://github.com/Tuhinshubhra/CMSeeK))
-- Url extraction ([gau](https://github.com/lc/gau),[waymore](https://github.com/xnl-h4ck3r/waymore), [katana](https://github.com/projectdiscovery/katana), [github-endpoints](https://gist.github.com/six2dez/d1d516b606557526e9a78d7dd49cacd3) and [JSA](https://github.com/w9w/JSA))
-- URL patterns Search and filtering ([urless](https://github.com/xnl-h4ck3r/urless), [gf](https://github.com/tomnomnom/gf) and [gf-patterns](https://github.com/1ndianl33t/Gf-Patterns))
-- Favicon Real IP ([fav-up](https://github.com/pielco11/fav-up))
-- Javascript analysis ([subjs](https://github.com/lc/subjs), [JSA](https://github.com/w9w/JSA), [xnLinkFinder](https://github.com/xnl-h4ck3r/xnLinkFinder), [getjswords](https://github.com/m4ll0k/BBTz), [mantra](https://github.com/MrEmpy/mantra))
-- Fuzzing ([ffuf](https://github.com/ffuf/ffuf))
-- URL sorting by extension
-- Wordlist generation
-- Passwords dictionary creation ([pydictor](https://github.com/LandGrey/pydictor))
+4. **Update Tool**:
+   ```bash
+   git fetch upstream
+   git rebase upstream/main master
+   ```
 
-## Vulnerability checks
-
-- XSS ([dalfox](https://github.com/hahwul/dalfox))
-- Open redirect ([Oralyzer](https://github.com/r0075h3ll/Oralyzer))
-- SSRF (headers [interactsh](https://github.com/projectdiscovery/interactsh) and param values with [ffuf](https://github.com/ffuf/ffuf))
-- CRLF ([crlfuzz](https://github.com/dwisiswant0/crlfuzz))
-- Cors ([Corsy](https://github.com/s0md3v/Corsy))
-- LFI Checks ([ffuf](https://github.com/ffuf/ffuf))
-- SQLi Check ([SQLMap](https://github.com/sqlmapproject/sqlmap) and [ghauri](https://github.com/r0oth3x49/ghauri))
-- SSTI ([ffuf](https://github.com/ffuf/ffuf))
-- SSL tests ([testssl](https://github.com/drwetter/testssl.sh))
-- Broken Links Checker ([katana](https://github.com/projectdiscovery/katana))
-- Prototype Pollution ([ppmap](https://github.com/kleiton0x00/ppmap))
-- Web Cache Vulnerabilities ([Web-Cache-Vulnerability-Scanner](https://github.com/Hackmanit/Web-Cache-Vulnerability-Scanner))
-- 4XX Bypasser ([nomore403](https://github.com/devploit/nomore403))
-
-## Extras
-
-- Multithreading ([Interlace](https://github.com/codingo/Interlace))
-- Custom resolvers generated list ([dnsvalidator](https://github.com/vortexau/dnsvalidator))
-- Docker container included and [DockerHub](https://hub.docker.com/r/six2dez/reconftw) integration
-- Ansible + Terraform deployment over AWS
-- Allows IP/CIDR as target
-- Resume the scan from last performed step
-- Custom output folder option
-- All in one installer/updater script compatible with most distros
-- Diff support for continuous running (cron mode)
-- Support for targets with multiple domains
-- Raspberry Pi/ARM support
-- 6 modes (recon, passive, subdomains, web, osint and all)
-- Out of Scope Support + optional [inscope](https://github.com/tomnomnom/hacks/tree/master/inscope) support
-- Notification system with Slack, Discord and Telegram ([notify](https://github.com/projectdiscovery/notify)) and sending zipped results support
+---
 
 ## Mindmap/Workflow
 
 ![Mindmap](images/mindmap_obsidian.png)
 
-## Data Keep
+---
 
-Follow these simple steps to end up with a private repository with your `API Keys` and `/Recon` data.
+## Sample video
 
-### Makefile
+![Video](images/reconFTW.gif)
 
-A `Makefile` is provided to quickly bootstrap a private repo. To use it, you'll need the [Github CLI](https://cli.github.com/) installed.
+---
 
-Once done, just run:
+## 🤝 How to Contribute
 
-```bash
-# below line is optional, the default is ~/reconftw-data
-export PRIV_REPO="$HOME/reconftw-data"
-make bootstrap
-```
+Contributions are welcome! You can help by:
 
-To sync your private repo with upstream:
+- **Reporting Issues**: Submit bugs or feature requests via [GitHub Issues](https://github.com/six2dez/reconftw/issues/new/choose).
+- **Submitting Pull Requests**: Contribute code improvements to the [dev branch](https://github.com/six2dez/reconftw/tree/dev).
 
-```bash
-make sync
-```
+**Guidelines**: Follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-To upload juicy recon data:
+---
 
-```bash
-make upload
-```
+## ❓ Need Help?
 
-### Manual
+- **Wiki**: Explore the [reconFTW Wiki](https://github.com/six2dez/reconftw/wiki).
+- **FAQ**: Check the [FAQ](https://github.com/six2dez/reconftw/wiki/7.-FAQs).
+- **Community**: Join the [Discord server](https://discord.gg/R5DdXVEdTy) or [Telegram group](https://t.me/joinchat/TO_R8NYFhhbmI5co).
 
-- Create a private **blank** repository on `Git(Hub|Lab)` (Take into account size limits regarding Recon data upload)
+---
 
-- Clone your project: `git clone https://gitlab.com/example/reconftw-data`
-- Get inside the cloned repository: `cd reconftw-data`
-- Create a new branch with an empty commit: `git commit --allow-empty -m "Empty commit"`
-- Add the official repo as a new remote: `git remote add upstream https://github.com/six2dez/reconftw` (`upstream` is an example)
-- Update upstream's repo: `git fetch upstream`
-- Rebase current branch with the official one: `git rebase upstream/main master`
+## 💖 Support This Project
 
-### Main commands
+Support reconFTW’s development through:
 
-- Upload changes to your personal repo: `git add . && git commit -m "Data upload" && git push origin master`
-- Update tool anytime: `git fetch upstream && git rebase upstream/main master`
-
-## How to contribute
-
-If you want to contribute to this project, you can do it in multiple ways:
-
-- Submitting an [issue](https://github.com/six2dez/reconftw/issues/new/choose) because you have found a bug or you have any suggestion or request.
-- Making a Pull Request from [dev](https://github.com/six2dez/reconftw/tree/dev) branch because you want to improve the code or add something to the script.
-
-## Need help? :information_source:
-
-- Take a look at the [wiki](https://github.com/six2dez/reconftw/wiki) section.
-- Check [FAQ](https://github.com/six2dez/reconftw/wiki/7.-FAQs) for commonly asked questions.
-- Join our [Discord server](https://discord.gg/R5DdXVEdTy)
-- Ask for help in the [Telegram group](https://t.me/joinchat/TO_R8NYFhhbmI5co)
-
-## Support this project
-
-### Buymeacoffee
+- **Buy Me a Coffee**: [buymeacoffee.com/six2dez](https://www.buymeacoffee.com/six2dez)
 
 [<img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png">](https://www.buymeacoffee.com/six2dez)
 
-### DigitalOcean referral link
+- **DigitalOcean Referral**: [Referral Link](https://www.digitalocean.com/?refcode=f362a6e193a1&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
 <a href="https://www.digitalocean.com/?refcode=f362a6e193a1&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" /></a>
 
-### GitHub sponsorship
+- **GitHub Sponsorship**: [github.com/sponsors/six2dez](https://github.com/sponsors/six2dez)
 
-[Sponsor](https://github.com/sponsors/six2dez)
+---
 
-## Thanks :pray:
+## 🙏 Thanks
 
-- Thank you for lending a helping hand towards the development of the project!
+Special thanks to the following services for supporting reconFTW:
 
 - [C99](https://api.c99.nl/)
 - [CIRCL](https://www.circl.lu/)
@@ -647,8 +756,14 @@ If you want to contribute to this project, you can do it in multiple ways:
 - [intelx](https://intelx.io/)
 - [Whoxy](https://www.whoxy.com/)
 
-## Disclaimer
+---
 
-Usage of this program for attacking targets without consent is illegal. It is the user's responsibility to obey all applicable laws. The developer assumes no liability and is not responsible for any misuse or damage caused by this program. Please use responsibly.
+## 📜 License
 
-The material contained in this repository is licensed under MIT.
+reconFTW is licensed under the [MIT License](LICENSE).
+
+---
+
+## ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=six2dez/reconftw&type=Date)](https://www.star-history.com/#six2dez/reconftw&Date)
