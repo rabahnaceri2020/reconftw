@@ -1,0 +1,13 @@
+#Ignoring output directories
+Recon/
+output/
+.obsidian/
+test/
+.trunk/
+
+#Ignoring compressed files
+*.tar
+*.tar.*
+*.zip
+.DS_Store
+reconftw.cfg-personal
